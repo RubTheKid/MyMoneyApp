@@ -1,18 +1,41 @@
 import React, { Component } from 'react'
-import Grid from './../src/common/layout/grid';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Field, arrayInsert, arrayRemove } from 'redux-form';
 
-import { Field } from 'redux-form';
+import Grid from './../src/common/layout/grid';
 import Input from '../src/common/form/input';
 
 class CreditList extends Component{
 
+    add(index, item = {}){
+        if(!this.props.readonly){
+            this.props.arrayInsert('billingCycleForm', 'credits', index, item)
+        }
+    }
+
+    remove(index){
+        if(!this.props.readOnly && this.props.list.length > 1){
+            this.props.arrayRemove('billingCycleForm', 'credits', index)
+        }
+    }
     renderRows(){
         const list = this.props.list || []
         return list.map((item, index) => (
             <tr key={index}>
                 <td><Field name={`credits[${index}].name`} component={Input} placeholder='Informe o nome' readonly={this.props.readOnly} /></td>
                 <td><Field name={`credits[${index}].value`} component={Input} placeholder='Informe o valor' readonly={this.props.readOnly} /></td>
-                <td></td>
+                <td>
+                    <button type='button' className='btn btn-success' onClick={() => this.add(index + 1)}>
+                        <i className='fa fa-plus'></i>
+                    </button>
+                    <button type='button' className='btn btn-warning' onClick={() => this.add(index + 1, item)}>
+                        <i className='fa fa-clone'></i>
+                    </button>
+                    <button type='button' className='btn btn-danger' onClick={() => this.remove(index)}>
+                        <i className='fa fa-trash-o'></i>
+                    </button>
+                </td>
             </tr>
         ))
     }
@@ -27,7 +50,7 @@ class CreditList extends Component{
                             <tr>
                                 <th>Nome</th>
                                 <th>Valor</th>
-                                <th>Ações</th>
+                                <th className='table-actions'>Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,4 +63,7 @@ class CreditList extends Component{
     }
 }
 
-export default CreditList
+
+const mapDispatchToProps = dispatch => bindActionCreators({ arrayInsert, arrayRemove }, dispatch)
+
+export default connect(null, mapDispatchToProps)(CreditList)
