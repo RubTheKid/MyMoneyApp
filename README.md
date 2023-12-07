@@ -20,10 +20,10 @@ Na pasta backend:
     mongod
    
 2. ```markdown
-  npm run production
+     npm run production
 
   Na pasta frontend:
 
 3. ```markdown
    npm run production
-```
+
