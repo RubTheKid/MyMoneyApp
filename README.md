@@ -19,9 +19,8 @@ Na pasta backend:
 1. ```markdown
     mongod
    
-2. ````markdown
+2. ```markdown
   npm run production
-  ```
 
   Na pasta frontend:
 
